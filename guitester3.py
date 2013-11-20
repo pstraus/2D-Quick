@@ -128,7 +128,8 @@ class killer(QtGui.QMainWindow, Ui_MainWindow):
         pptmp = pptmp/max(np.abs(pptmp))     
         self.ppProjection = pp.PumpProbe(pptmp, self.finalData.probeAxis, 0)     
         self.Update_pp_Plot()        
-        self.RelPhaseEdit.setText(str(self.Parameters.rel_phase))        
+        self.RelPhaseEdit.setText(str(self.Parameters.rel_phase))       
+        self.RelPhaseScroll.setValue(int(self.Parameters.rel_phase * 100))
         #plt.figure()
         #plt.contour(self.rData.probeAxis, self.rData.tauAxis,np.real(self.rData.data * np.exp(-2j * np.pi * self.Parameters.finalPhase)), 70)
         #plt.title("Rephasing Data")        
@@ -369,17 +370,41 @@ class killer(QtGui.QMainWindow, Ui_MainWindow):
         plt.show()     
     
     def _updateRelPhase(self):
-        self.Parameters.rel_phase = float(unicode(self.RelPhaseEdit.text()))
+        newval = float(unicode(self.RelPhaseEdit.text()))
+        delta = newval - self.Parameters.rel_phase        
+        self.Parameters.rel_phase = newval        
         self.RelPhaseScroll.setValue(int(100*self.Parameters.rel_phase))        
-        self.PlotFinalData()
+        self.rData.data = self.rData.data * np.exp(1j * np.pi * delta)
+        self.nrData.data = self.nrData.data * np.exp(-1j * np.pi * delta)
+       
+        self.finalData.data = (self.rData.data + self.nrData.data)
+        self.PlotFinalData()      
+        pptmp = np.sum(np.real(self.finalData.data * np.exp(2j * np.pi * self.Parameters.finalPhase)), axis = 0)  
+        pptmp = pptmp/max(np.abs(pptmp))     
+        self.ppProjection = pp.PumpProbe(pptmp, self.finalData.probeAxis, 0)     
+        self.Update_pp_Plot()        
         
     def _updateRelPhaseSlider(self):
-        newval = (self.RelPhaseScroll.value())/100
+        newval = float((self.RelPhaseScroll.value()))/100
         #current = self.Parameters.rel_phase
         #newval = current + delta
-        self.RelPhaseEdit.setText(str(newval))
+        self.RelPhaseEdit.setText(unicode(str((newval))))
+        
+        delta = newval - self.Parameters.rel_phase        
+        
         self.Parameters.rel_phase = newval
+              
+        
+        self.rData.data = self.rData.data * np.exp(1j * np.pi * delta)
+        self.nrData.data = self.nrData.data * np.exp(-1j * np.pi * delta)
+       
+        self.finalData.data = (self.rData.data + self.nrData.data)
         self.PlotFinalData()      
+        pptmp = np.sum(np.real(self.finalData.data * np.exp(2j * np.pi * self.Parameters.finalPhase)), axis = 0)  
+        pptmp = pptmp/max(np.abs(pptmp))     
+        self.ppProjection = pp.PumpProbe(pptmp, self.finalData.probeAxis, 0)     
+        self.Update_pp_Plot()
+ 
         
 def main():
     app = QtGui.QApplication(sys.argv)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'GuiCode.ui'
 #
-# Created: Tue Nov 19 19:39:55 2013
+# Created: Wed Nov 20 13:00:05 2013
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -250,7 +250,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow._plotRtauAbs)
         QtCore.QObject.connect(self.pushButton_4, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow._plotNRtauAbs)
         QtCore.QObject.connect(self.RelPhaseEdit, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow._updateRelPhase)
-        QtCore.QObject.connect(self.RelPhaseScroll, QtCore.SIGNAL(_fromUtf8("actionTriggered(int)")), MainWindow._updateRelPhaseSlider)
+        QtCore.QObject.connect(self.RelPhaseScroll, QtCore.SIGNAL(_fromUtf8("valueChanged(int)")), MainWindow._updateRelPhaseSlider)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

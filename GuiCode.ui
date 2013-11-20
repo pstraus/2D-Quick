@@ -1013,7 +1013,7 @@
   </connection>
   <connection>
    <sender>RelPhaseScroll</sender>
-   <signal>actionTriggered(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
    <slot>_updateRelPhaseSlider()</slot>
    <hints>
